@@ -1,0 +1,15 @@
+{
+  "name": "The Check-In Game",
+  "short_name": "Check-In",
+  "description": "A two-player check-in card game. Private, offline, on one phone.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#263238",
+  "theme_color": "#263238",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

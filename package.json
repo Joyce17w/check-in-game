@@ -1,0 +1,11 @@
+{
+  "name": "check-in-game",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A two-player couples' check-in card game. Static, offline, no accounts.",
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "sync": "node tools/build.mjs",
+    "test": "node --test"
+  }
+}
