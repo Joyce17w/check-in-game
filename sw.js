@@ -2,7 +2,7 @@
 // served from the cache afterwards, refreshing quietly in the background when
 // there is a connection. Only this app's own files are ever requested.
 // Bump CACHE when the list of files changes.
-const CACHE = 'check-in-v3';
+const CACHE = 'check-in-v4';
 const ASSETS = [
   './',
   'index.html',

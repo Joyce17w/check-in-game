@@ -828,7 +828,7 @@
 
   function homeScreen() {
     var nodes = [];
-    var hero = [h('div', { class: 'fan', 'aria-hidden': 'true' }, [0, 1, 2, 3, 4, 5].map(function () { return h('i'); })),
+    var hero = [h('div', { class: 'fan', 'aria-hidden': 'true' }, [0, 1, 2].map(function () { return h('i'); })),
       p('Starts light, goes deep, ends warm.', 'voice')];
     var links = h('div', { class: 'menu' },
       btn('History', function () { view = { name: 'history' }; render(); }, { k: 'hist' }),
