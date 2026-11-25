@@ -6,6 +6,7 @@
   "scripts": {
     "start": "python3 -m http.server 4173",
     "sync": "node tools/build.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "icons": "sh tools/icons.sh"
   }
 }

@@ -34,7 +34,8 @@ that device only and override `cards.json` until "Reset all piles to defaults".
 | `js/app.js` | Screens, storage, timers. |
 | `styles.css` | The visual design. Each round has a colour theme set by `--bg` and `--ink`; system fonts only. |
 | `cards.json` | The card piles. |
-| `sw.js`, `manifest.webmanifest`, `icons/` | Offline install. Icons are placeholders. |
+| `sw.js`, `manifest.webmanifest` | Offline install. |
+| `icons/icon.svg` | The app icon. After editing it, run `npm run icons` to re-render the PNGs. |
 | `tests/engine.test.mjs` | Rule tests. Run with `npm test`. |
 
 ## After changing any file
