@@ -2,7 +2,7 @@
 // files come fresh from the server; offline, they come from the cache.
 // Only this app's own files are ever requested.
 // Bump CACHE when the list of files changes.
-const CACHE = 'check-in-v6';
+const CACHE = 'check-in-v7';
 const ASSETS = [
   './',
   'index.html',

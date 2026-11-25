@@ -1,56 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <!-- App icon source. Three cards: midnight, wine, and the paper card in
-       hand, marked with a fine brass ring and a check for "check-in".
+  <!-- App icon source. Flat and matte, like the app: a deep teal field,
+       three cards, and a bold check for "check-in".
        Full-bleed square: the phone rounds the corners. Everything important
        sits inside the middle 80% so it also works as a maskable icon.
        Re-render the PNGs with: npm run icons -->
   <defs>
-    <radialGradient id="night" cx="50%" cy="30%" r="90%">
-      <stop offset="0" stop-color="#2B2238"/>
-      <stop offset="0.6" stop-color="#17131F"/>
-      <stop offset="1" stop-color="#0E0B14"/>
-    </radialGradient>
-    <linearGradient id="deep" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#4A52A0"/>
-      <stop offset="1" stop-color="#2C3273"/>
-    </linearGradient>
-    <linearGradient id="wine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#A04562"/>
-      <stop offset="1" stop-color="#6E2A40"/>
-    </linearGradient>
-    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FBF7EE"/>
-      <stop offset="1" stop-color="#EFE6D4"/>
-    </linearGradient>
-    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#DDBB6C"/>
-      <stop offset="1" stop-color="#A97A26"/>
-    </linearGradient>
-    <filter id="lift" x="-30%" y="-30%" width="160%" height="170%">
-      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.55"/>
-    </filter>
-    <filter id="liftSoft" x="-30%" y="-30%" width="160%" height="170%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.5"/>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/>
+      <feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.5 0"/>
     </filter>
   </defs>
-
-  <rect width="1024" height="1024" fill="url(#night)"/>
-
-  <!-- back cards, fanned from a point below the icon -->
-  <g filter="url(#liftSoft)">
-    <rect x="352" y="272" width="320" height="456" rx="30" fill="url(#deep)" transform="rotate(-15 512 1240)"/>
-  </g>
-  <g filter="url(#liftSoft)">
-    <rect x="352" y="272" width="320" height="456" rx="30" fill="url(#wine)" transform="rotate(15 512 1240)"/>
-  </g>
-
-  <!-- the card in hand, with a printed frame -->
-  <g filter="url(#lift)">
-    <rect x="342" y="246" width="340" height="484" rx="32" fill="url(#paper)"/>
-  </g>
-  <rect x="366" y="270" width="292" height="436" rx="16" fill="none" stroke="#C0913A" stroke-opacity="0.55" stroke-width="3"/>
-
-  <!-- brass ring and check -->
-  <circle cx="512" cy="488" r="84" fill="none" stroke="url(#brass)" stroke-width="12"/>
-  <path d="M474 490 l28 28 l50 -60" fill="none" stroke="#1E1728" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="1024" height="1024" fill="#12403C"/>
+  <rect x="352" y="282" width="320" height="456" rx="26" fill="#141B4D" transform="rotate(-15 512 1240)"/>
+  <rect x="352" y="282" width="320" height="456" rx="26" fill="#6B1F2E" transform="rotate(15 512 1240)"/>
+  <rect x="342" y="256" width="340" height="484" rx="28" fill="#F3EFE6"/>
+  <path d="M436 502 l54 54 l100 -122" fill="none" stroke="#141416" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="1024" height="1024" filter="url(#grain)" style="mix-blend-mode:overlay" opacity="0.45"/>
 </svg>

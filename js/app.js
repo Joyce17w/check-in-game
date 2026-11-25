@@ -350,7 +350,8 @@
       var fig = h('div', { class: 'guide-art' });
       fig.innerHTML = step.art;
       fig.prepend(h('span', { class: 'guide-num', 'aria-hidden': 'true' }, i + 1));
-      wrap.replaceChildren(
+      wrap.replaceChildren();
+      add(wrap, [
         fig,
         h('p', { class: 'guide-text', 'aria-live': 'polite' },
           h('span', { class: 'sr-only' }, 'Step ' + (i + 1) + ' of ' + n + '. '), step.text),
@@ -360,7 +361,7 @@
           btn('Back', function () { go(i - 1, 'gback'); }, { k: 'gback', disabled: i === 0 }),
           btn(last ? doneLabel : 'Next', function () { go(i + 1, 'gnext'); }, { kind: 'primary', k: 'gnext' })),
         !last && onSkip ? h('div', { class: 'actions' }, btn('Skip', onSkip, { kind: 'small plain', k: 'gskip' })) : null,
-        last ? h('details', null, h('summary', null, 'All the rules in words'), howToContent()) : null);
+        last ? h('details', null, h('summary', null, 'All the rules in words'), howToContent()) : null]);
     }
     wrap.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
     wrap.addEventListener('touchend', function (e) {
@@ -783,7 +784,7 @@
     var first = nameOf(c.starter), second = nameOf(other(c.starter));
     var header = function () {
       return [h('div', { class: 'deck', 'data-pile': c.pile },
-        h('div', { class: 'playing-card paper' + (ui.dealt === c.text ? '' : ' deal') },
+        h('div', { class: 'playing-card' + (ui.dealt === c.text ? '' : ' deal') },
           h('p', { class: 'pile' }, h('b', null, c.pileName), c.hint),
           h('p', { class: 'card-text' }, c.text)))];
     };

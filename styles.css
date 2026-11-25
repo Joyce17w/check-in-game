@@ -1,48 +1,43 @@
-/* The Check-In Game: visual design.
+/* The Check-In Game: visual design ("colour field").
 
-   The idea: the room changes with the round, like an evening passing.
-   Golden hour for the warm-up, then sea-dark, midnight and aubergine as it
-   goes deep, wine for Repair, and a soft blush for the Close. The question
-   is always a paper card.
-
-   Type, all system fonts (the app makes no network calls):
-   --serif  questions, headings, and (in italic) words meant to be said aloud
-   --ui     a quiet sans for everything you tap
+   One deep matte colour fills the screen for each round, under a film grain.
+   The question is set large in tight bold type, straight on the colour.
+   Words meant to be said out loud are bold; everything else is regular.
+   System fonts only (the app makes no network calls).
 
    Each theme sets --bg and --ink. Everything else derives from those two. */
 
 :root {
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, ui-serif, "New York", Georgia, serif;
-  --ui: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+  --ui: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  --paper: #F7F1E6;
-  --plum: #1E1728;
-  --honey: #C0913A;
+  --paper: #F3EFE6;
+  --plum: #141416;
+  --honey: #D9A21B;
 
-  --c-night: #17131F;
-  --c-warm: #E6C380;
-  --c-dig: #1E4A47;
-  --c-under: #1B2046;
-  --c-pat: #371E42;
-  --c-rep: #6E2A40;
-  --c-close: #E7C6AC;
-  --c-break: #AEBBCB;
+  --c-night: #141416;
+  --c-warm: #C99A1E;
+  --c-dig: #12403C;
+  --c-under: #141B4D;
+  --c-pat: #3B1747;
+  --c-rep: #6B1F2E;
+  --c-close: #D8A48F;
+  --c-break: #2B3440;
 
-  --radius: 0.8rem;
+  --radius: 0.65rem;
   --target: 3.3rem;
   --gap: 0.65rem;
 }
 
 /* ---------- themes ---------- */
 
-body { --bg: var(--c-night); --ink: #EFE7DA; }
+body { --bg: var(--c-night); --ink: #F3EFE6; }
 body[data-theme="warm"]  { --bg: var(--c-warm);  --ink: var(--plum); }
-body[data-theme="dig"]   { --bg: var(--c-dig);   --ink: #EAF1EC; }
-body[data-theme="under"] { --bg: var(--c-under); --ink: #E9E9F4; }
-body[data-theme="pat"]   { --bg: var(--c-pat);   --ink: #F1E7F1; }
-body[data-theme="rep"]   { --bg: var(--c-rep);   --ink: #F8EAE6; }
+body[data-theme="dig"]   { --bg: var(--c-dig);   --ink: #F3EFE6; }
+body[data-theme="under"] { --bg: var(--c-under); --ink: #F3EFE6; }
+body[data-theme="pat"]   { --bg: var(--c-pat);   --ink: #F3EFE6; }
+body[data-theme="rep"]   { --bg: var(--c-rep);   --ink: #F3EFE6; }
 body[data-theme="close"] { --bg: var(--c-close); --ink: var(--plum); }
-body[data-theme="break"] { --bg: var(--c-break); --ink: #1B2436; }
+body[data-theme="break"] { --bg: var(--c-break); --ink: #F3EFE6; }
 
 .paper, .sheet { --bg: var(--paper); --ink: var(--plum); }
 
@@ -62,12 +57,16 @@ html { font: 106.25%/1.5 var(--ui); -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(110% 55% at 50% -5%, color-mix(in srgb, var(--bg) 90%, white), transparent 75%),
-    var(--bg);
-  background-color: var(--bg);
+  background: var(--bg);
   transition: background-color 0.9s ease;
   -webkit-font-smoothing: antialiased;
+}
+
+/* A film grain over everything, so the colour reads as matte, not flat. */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay; opacity: 0.5;
 }
 
 .screen {
@@ -79,11 +78,10 @@ body {
 /* ---------- type ---------- */
 
 h1 {
-  font-family: var(--serif);
   font-size: 2.1rem;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
   margin: 1.6rem 0 0.6rem;
   text-wrap: balance;
 }
@@ -93,20 +91,19 @@ p { margin: 0.55rem 0; text-wrap: pretty; }
 .quiet { color: var(--quiet); font-size: 0.92rem; }
 
 .voice, .script, blockquote, .cheat td:last-child {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 700;
 }
-.voice { font-size: 1.12rem; }
-.script { font-size: 1.4rem; line-height: 1.35; margin: 0.9rem 0; }
+.voice { font-size: 1rem; }
+.script { font-size: 1.5rem; line-height: 1.15; margin: 0.9rem 0; letter-spacing: -0.02em; }
 
 blockquote {
   margin: 1rem 0 1.2rem;
-  padding-left: 1rem;
-  border-left: 1px solid var(--hair);
-  font-size: 1.7rem;
-  line-height: 1.25;
+  padding-left: 0;
+  border-left: 0;
+  font-size: 1.9rem;
+  line-height: 1.08;
   text-wrap: balance;
+  letter-spacing: -0.03em;
 }
 .player blockquote { font-size: 1.2rem; margin: 0.2rem 0 0.8rem; }
 
@@ -134,14 +131,14 @@ blockquote {
   background: var(--ink);
   color: var(--bg);
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.01em;
   min-height: 3.75rem;
 }
 .btn.primary:active:not(:disabled) { background: var(--ink); opacity: 0.85; }
 .btn.primary:disabled { background: var(--tint); color: var(--quiet); }
 
-.btn.big { width: 100%; min-height: 3.75rem; font-size: 1.05rem; box-shadow: inset 0 0 0 1px var(--hair); background: none; }
+.btn.big { width: 100%; min-height: 3.75rem; font-size: 1.05rem; box-shadow: none; background: var(--tint); }
 .btn.small { min-height: 2.75rem; padding: 0.3rem 0.85rem; font-size: 0.9rem; }
 .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); box-shadow: none; }
 .btn:disabled { opacity: 0.5; cursor: default; }
@@ -182,16 +179,16 @@ blockquote {
 
 .bar, .strip { display: flex; align-items: center; gap: 0.6rem; }
 .round { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.4rem; }
-.round-name { font-family: var(--serif); font-style: italic; font-size: 1.15rem; line-height: 1; }
+.round-name { font-size: 1rem; line-height: 1; font-weight: 700; }
 .pips { display: flex; gap: 0.25rem; }
 .pip { width: 1.1rem; height: 2px; background: var(--hair); }
 .pip.done, .pip.now { background: var(--ink); }
 .pip.now { height: 3px; margin-top: -0.5px; }
-.bar .btn { min-height: 2.75rem; background: none; box-shadow: inset 0 0 0 1px var(--hair); }
+.bar .btn { min-height: 2.75rem; background: var(--tint); box-shadow: none; }
 
 .jar {
   font: inherit; cursor: pointer; border: 0; color: var(--ink);
-  background: none; box-shadow: inset 0 0 0 1px var(--hair);
+  background: var(--tint); box-shadow: none;
   border-radius: var(--radius);
   min-height: 2.75rem; padding: 0.2rem 0.85rem 0.2rem 0.6rem;
   display: flex; align-items: center; gap: 0.5rem;
@@ -203,16 +200,17 @@ blockquote {
 .jar-fill { fill: var(--honey); transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.9s ease; }
 .jar-count { font-size: 0.88rem; color: var(--quiet); }
 .jar-count b { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
-.jar.full { box-shadow: inset 0 0 0 1.5px var(--honey); }
+.jar.full { box-shadow: inset 0 0 0 2px var(--honey); }
 
 /* ---------- the card ---------- */
 
-.deck { position: relative; margin: 1.6rem 0 1.5rem; --pile: var(--honey); }
+.deck { position: relative; margin: 2.4rem 0 2rem; --pile: var(--honey); }
 .deck::before {
   content: ""; position: absolute; inset: 0; border-radius: 1rem;
   background: var(--pile);
   transform: rotate(-2.2deg) translate(-0.15rem, 0.4rem);
   box-shadow: 0 0.6rem 1.4rem -0.8rem rgb(8 4 14 / 0.6);
+  display: none;
 }
 .deck[data-pile="sweet"] { --pile: #CF8791; }
 .deck[data-pile="silly"] { --pile: #D3A04A; }
@@ -225,17 +223,18 @@ blockquote {
 
 .playing-card {
   position: relative; z-index: 1;
-  background: var(--paper);
-  border-radius: 1rem;
-  padding: 1.5rem 1.6rem 1.9rem;
-  min-height: 12rem;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  min-height: 9rem;
   display: flex; flex-direction: column;
-  box-shadow: 0 1.2rem 2.2rem -1.1rem rgb(8 4 14 / 0.6), 0 1px 0 rgb(8 4 14 / 0.1);
+  box-shadow: none;
 }
 /* A printed frame, like the border on a good playing card. */
 .playing-card::after {
   content: ""; position: absolute; inset: 0.55rem; border-radius: 0.6rem;
   border: 1px solid color-mix(in srgb, var(--pile) 70%, transparent); pointer-events: none;
+  display: none;
 }
 .playing-card.deal { animation: deal 0.45s ease-out both; }
 @keyframes deal {
@@ -244,37 +243,37 @@ blockquote {
 }
 .pile { margin: 0 0 1.1rem; font-size: 0.88rem; color: var(--quiet); display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
 .pile b {
-  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.05rem;
-  color: color-mix(in srgb, var(--pile) 62%, var(--plum));
+ font-weight: 700; font-size: 0.88rem;
+  color: var(--ink);
 }
 .card-text {
-  font-family: var(--serif);
-  font-size: 1.62rem; line-height: 1.24; font-weight: 500; letter-spacing: -0.005em;
-  margin: auto 0; text-wrap: balance;
+  font-size: 2.05rem; line-height: 1.05; font-weight: 700; letter-spacing: -0.035em;
+  margin: 0; text-wrap: balance;
 }
 
 /* ---------- players ---------- */
 
 .player {
-  border-radius: 1rem;
+  border-radius: 0.9rem;
   padding: 0.95rem;
   margin: 0.8rem 0;
-  box-shadow: inset 0 0 0 1px var(--hair);
+  box-shadow: none;
+  background: var(--tint);
 }
 .player h2 { display: flex; align-items: baseline; gap: 0.55rem; font-size: 1.05rem; font-weight: 600; }
-.role { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 0.98rem; color: var(--quiet); }
-.player[data-role="speaking"] { background: var(--tint); box-shadow: inset 0 0 0 1.5px var(--ink); }
-.player[data-role="speaking"] .role { color: var(--ink); }
+.role { font-weight: 400; font-size: 0.88rem; color: var(--quiet); }
+.player[data-role="speaking"] { background: var(--tint-strong); box-shadow: none; }
+.player[data-role="speaking"] .role { color: var(--ink); font-weight: 700; }
 
 .timer { font-variant-numeric: tabular-nums; font-weight: 500; display: flex; align-items: center; gap: 0.6rem; }
-.timer.big { font-family: var(--serif); font-size: 5rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1; margin: 1rem 0; }
+.timer.big { font-size: 5rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin: 1rem 0; }
 
 details { margin: 0.4rem 0; }
 summary { min-height: 2.75rem; display: flex; align-items: center; cursor: pointer; font-weight: 500; gap: 0.5rem; }
 summary::before { content: "+"; width: 1.3rem; height: 1.3rem; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--hair); display: grid; place-items: center; line-height: 1; font-size: 0.95rem; }
 details[open] > summary::before { content: "–"; }
 summary::-webkit-details-marker { display: none; }
-.followups { margin: 0; padding: 0; list-style: none; font-family: var(--serif); font-style: italic; font-size: 1.12rem; }
+.followups { margin: 0; padding: 0; list-style: none; font-size: 1rem; font-weight: 500; }
 .followups li { margin: 0.5rem 0; padding-left: 0.9rem; border-left: 1px solid var(--hair); }
 
 /* ---------- home ---------- */
@@ -286,21 +285,21 @@ summary::-webkit-details-marker { display: none; }
   transform-origin: 50% 190%;
   transform: rotate(calc((var(--n) - 1) * 15deg));
   animation: fan 0.9s ease-out both;
-  box-shadow: 0 0.5rem 1rem -0.4rem rgb(0 0 0 / 0.55);
+  box-shadow: none;
 }
 @keyframes fan { from { transform: rotate(0deg); opacity: 0; } }
-.fan i:nth-child(1) { --n: 0; background: #3C4488; }
-.fan i:nth-child(2) { --n: 2; background: #8A3550; }
+.fan i:nth-child(1) { --n: 0; background: #1E6B63; }
+.fan i:nth-child(2) { --n: 2; background: #8A2A3C; }
 .fan i:nth-child(3) { --n: 1; background: var(--paper); }
-.fan + h1 { font-size: 2.9rem; font-weight: 400; line-height: 1; letter-spacing: -0.02em; text-align: center; margin: 1.5rem 0 0.5rem; }
-.fan + h1 + .voice { text-align: center; margin-bottom: 2rem; color: var(--quiet); font-size: 1.15rem; }
+.fan + h1 { font-size: 3.1rem; font-weight: 700; line-height: 0.95; letter-spacing: -0.04em; text-align: center; margin: 1.5rem 0 0.5rem; }
+.fan + h1 + .voice { text-align: center; margin-bottom: 2rem; color: var(--quiet); font-size: 1rem; font-weight: 400; }
 
 .coin {
   width: 7rem; height: 7rem; margin: 1.8rem auto; border-radius: 50%;
   display: grid; place-items: center;
-  font-family: var(--serif); font-size: 3.2rem; font-weight: 400; color: var(--plum);
-  background: linear-gradient(145deg, #E3C277, var(--honey));
-  box-shadow: inset 0 0 0 0.3rem rgb(255 255 255 / 0.16), inset 0 0 0 0.36rem rgb(30 23 40 / 0.22), 0 0.9rem 1.6rem -0.8rem rgb(0 0 0 / 0.6);
+ font-size: 3.2rem; font-weight: 700; color: var(--bg);
+  background: var(--ink);
+  box-shadow: none;
 }
 .coin.landed { animation: flip 0.9s ease-out both; }
 @keyframes flip {
@@ -340,7 +339,7 @@ legend { font-size: 0.92rem; font-weight: 500; color: var(--quiet); padding: 0; 
 .list { list-style: none; padding: 0; margin: 1.1rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
 .list > li > .btn { width: 100%; text-align: left; }
 .list.cards > li { display: flex; gap: 0.5rem; align-items: flex-start; }
-.list.cards textarea { font-family: var(--serif); }
+.list.cards textarea { }
 
 dl { margin: 0.9rem 0; }
 dt { font-weight: 600; margin-top: 1.05rem; }
@@ -349,12 +348,12 @@ dd ul { margin: 0.2rem 0; padding-left: 1.1rem; }
 
 /* The summary is a keepsake: a sheet of the same paper as the cards. */
 .summary.paper {
-  background: var(--paper); border-radius: 1rem; padding: 0.7rem 1.6rem 1.6rem;
-  box-shadow: 0 1.2rem 2.2rem -1.1rem rgb(8 4 14 / 0.5);
+  background: var(--paper); border-radius: 0.9rem; padding: 0.7rem 1.6rem 1.6rem;
+  box-shadow: none;
 }
 .summary dt { font-size: 0.86rem; font-weight: 500; color: var(--quiet); margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--hair); }
 .summary dt:first-child { border-top: 0; padding-top: 0; }
-.summary dd { font-family: var(--serif); font-size: 1.15rem; line-height: 1.35; color: var(--ink); }
+.summary dd { font-size: 1.05rem; line-height: 1.35; color: var(--ink); font-weight: 500; }
 .summary dd ul { list-style: none; padding: 0; }
 .summary dd li + li { margin-top: 0.3rem; }
 .summary dd .quiet { font-family: var(--ui); }
@@ -381,7 +380,7 @@ thead th { font-size: 0.86rem; font-weight: 500; color: var(--quiet); }
   animation: rise 0.3s ease-out both;
 }
 .sheet::backdrop { background: rgb(10 6 16 / 0.65); }
-.sheet h2 { font-family: var(--serif); font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; margin-bottom: 0.7rem; }
+.sheet h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.7rem; }
 @keyframes rise { from { transform: translateY(1.5rem); opacity: 0; } }
 @media (min-width: 40rem) { .sheet { margin: auto; border-radius: 1.2rem; } }
 
@@ -389,28 +388,29 @@ thead th { font-size: 0.86rem; font-weight: 500; color: var(--quiet); }
 .breath-circle {
   width: 10rem; height: 10rem; margin: 0 auto 1.3rem;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #8B90CC, #3C4488 80%);
-  box-shadow: 0 0 0 0.8rem color-mix(in srgb, #3C4488 12%, transparent);
+  background: #12403C;
+  box-shadow: none;
   transform: scale(0.5);
 }
 .breath-circle.in { transform: scale(1); transition: transform 4s ease-in-out; }
 .breath-circle.out { transform: scale(0.5); transition: transform 6s ease-in-out; }
-.breath-label { font-family: var(--serif); font-style: italic; font-size: 1.9rem; margin: 0; }
+.breath-label { font-size: 1.9rem; margin: 0; font-weight: 700; letter-spacing: -0.03em; }
 .breath-count { font-size: 0.95rem; color: var(--quiet); font-variant-numeric: tabular-nums; margin: 0.2rem 0 0; }
-.breath-count b { display: block; font-family: var(--serif); font-size: 2.4rem; font-weight: 400; color: var(--ink); line-height: 1.1; }
+.breath-count b { display: block; font-size: 2.4rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
 
 /* ---------- the picture guide ---------- */
 
 .guide-art {
   position: relative;
   background: var(--paper); color: var(--plum);
-  border-radius: 1rem; padding: 1.2rem 0.8rem 0.6rem;
-  box-shadow: 0 1.2rem 2.2rem -1.1rem rgb(8 4 14 / 0.5);
+  border-radius: 0.9rem; padding: 1.2rem 0.8rem 0.6rem;
+  box-shadow: none;
 }
 .sheet .guide-art { background: color-mix(in srgb, var(--plum) 5%, var(--paper)); box-shadow: none; }
 .guide-num {
   position: absolute; top: 0.7rem; left: 1rem;
-  font-family: var(--serif); font-size: 2rem; line-height: 1; color: var(--plum);
+ font-size: 1.6rem; line-height: 1; color: var(--plum);
+  font-weight: 700;
 }
 .art {
   display: block; width: 100%; height: auto;
@@ -422,9 +422,9 @@ thead th { font-size: 0.86rem; font-weight: 500; color: var(--quiet); }
 .art .no { stroke: #A23B55; stroke-width: 3.6; }
 .art .dash { stroke-dasharray: 4 6; }
 .art .t { fill: var(--plum); stroke: none; font: 500 13px var(--ui); }
-.art .t.big { font: 400 22px var(--serif); }
+.art .t.big { font: 700 22px var(--ui); }
 
-.guide-text { font-family: var(--serif); font-size: 1.35rem; line-height: 1.3; min-height: 3.6em; margin: 1.3rem 0 0.4rem; text-wrap: balance; }
+.guide-text { font-size: 1.45rem; line-height: 1.1; min-height: 3.6em; margin: 1.3rem 0 0.4rem; text-wrap: balance; font-weight: 700; letter-spacing: -0.03em; }
 .guide-dots { display: flex; gap: 0.3rem; margin: 0.4rem 0 1.1rem; }
 .guide-dots i { width: 1.1rem; height: 2px; background: var(--hair); }
 .guide-dots i.now { background: var(--ink); height: 3px; margin-top: -0.5px; }
@@ -480,7 +480,7 @@ body.table-mode { overflow: hidden; }
 .strip .round { flex-direction: row; align-items: center; gap: 0.8rem; }
 .half h1 { font-size: 1.5rem; margin: 0.7rem auto 0.3rem; }
 .half .deck { margin-block: 1rem 1.1rem; }
-.half .playing-card { min-height: 0; padding: 1.2rem 1.3rem 1.4rem; }
+.half .playing-card { min-height: 0; padding: 0; }
 .half .card-text { font-size: 1.3rem; }
 .half blockquote { font-size: 1.3rem; }
 .half .player { margin-block: 0.6rem; }
