@@ -261,6 +261,118 @@
     }));
   }
 
+
+  /* ---------- the picture guide ---------- */
+  // Line drawings in the manner of an assembly manual: two plain figures, a
+  // table, and one idea per panel. Classes g-a/g-b/g-c reveal parts in turn.
+
+  function person(x) {
+    return '<circle cx="' + x + '" cy="92" r="15"/><path d="M' + (x - 24) + ' 170v-36a24 24 0 0 1 48 0v36"/>';
+  }
+  function bubble(x, side, cls, inner) {
+    var tail = side === 'L' ? 'M' + (x + 12) + ' 62l-8 12 18-12' : 'M' + (x + 44) + ' 62l8 12-18-12';
+    return '<g class="' + (cls || '') + '"><rect class="f-paper" x="' + x + '" y="24" width="56" height="38" rx="10"/>' +
+      '<path class="f-paper" d="' + tail + '"/>' + (inner === undefined ? squiggle(x) : inner) + '</g>';
+  }
+  function squiggle(x) {
+    return '<path d="M' + (x + 11) + ' 38q4-6 8 0t8 0 8 0 8 0M' + (x + 11) + ' 50q4-6 8 0t8 0 8 0"/>';
+  }
+  var TABLE = '<path d="M30 170H290"/>';
+  var PEOPLE = person(80) + person(240) + TABLE;
+  var PHONE = '<rect class="f-ink" x="144" y="162" width="32" height="8" rx="3"/>';
+  var CHECK = '<circle class="f-honey" cx="160" cy="118" r="17"/><path d="M152 119l6 6 11-13"/>';
+
+  function art(body) {
+    return '<svg class="art" viewBox="0 0 320 190" aria-hidden="true" focusable="false">' + body + '</svg>';
+  }
+
+  var GUIDE = [
+    {
+      text: 'Two of you, one phone. It deals a card.',
+      art: art(PEOPLE + PHONE +
+        '<g class="g-rise"><rect class="f-paper" x="138" y="84" width="44" height="60" rx="6"/>' +
+        '<path d="M148 102h24M148 114h24M148 126h14"/></g>')
+    },
+    {
+      text: 'You both answer every card. Take turns going first.',
+      art: art(PEOPLE + PHONE + bubble(92, 'L', 'g-a') + bubble(172, 'R', 'g-b') +
+        '<g class="g-c"><path d="M146 104h28m-7-7 7 7-7 7M174 128h-28m7-7-7 7 7 7"/></g>')
+    },
+    {
+      text: 'On deep cards one speaks. The other only listens.',
+      art: art(PEOPLE + bubble(92, 'L', 'g-talk') +
+        '<g class="g-b"><path d="M210 82a12 12 0 0 0 0 20M200 74a22 22 0 0 0 0 36"/></g>' +
+        '<g class="g-c"><rect class="dash" x="204" y="24" width="56" height="38" rx="10"/><path class="no" d="M210 58l44-30"/></g>')
+    },
+    {
+      text: 'The listener says it back. The speaker taps yes. Then swap.',
+      art: art(PEOPLE + PHONE + bubble(92, 'L') + bubble(172, 'R', 'g-a') + '<g class="g-b">' + CHECK + '</g>')
+    },
+    {
+      text: 'Getting defensive? Press your own shield. Never the other’s.',
+      art: art(PEOPLE +
+        '<g class="g-pulse"><path class="f-honey" d="M80 118l18 7v13c0 11-8 19-18 23-10-4-18-12-18-23v-13z"/></g>' +
+        '<text class="t big" x="80" y="56" text-anchor="middle">+4</text>' +
+        '<g class="g-b"><path d="M124 96h62m-8-8 8 8-8 8"/><path class="no" d="M144 82l24 28M168 82l-24 28"/></g>')
+    },
+    {
+      text: 'Pass, park a card for later, or stop whenever you like.',
+      art: art(
+        '<g class="g-a"><path d="M52 62l20 22-20 22M74 62l20 22-20 22"/><text class="t" x="72" y="142" text-anchor="middle">Pass ×3</text></g>' +
+        '<g class="g-b"><path d="M144 58h32v52l-16-12-16 12z"/><text class="t" x="160" y="142" text-anchor="middle">Park it</text></g>' +
+        '<g class="g-c"><path d="M240 60h-12v48h12M244 84h30m-9-9 9 9-9 9"/><text class="t" x="250" y="142" text-anchor="middle">Go to close</text></g>')
+    },
+    {
+      text: 'One jar. You fill it together.',
+      art: art(PEOPLE +
+        '<clipPath id="g-jar"><path d="M138 112q0-6 6-6h32q6 0 6 6v50q0 8-8 8h-28q-8 0-8-8z"/></clipPath>' +
+        '<g clip-path="url(#g-jar)"><rect class="f-honey g-fill" x="138" y="106" width="44" height="64"/></g>' +
+        '<path d="M138 112q0-6 6-6h32q6 0 6 6v50q0 8-8 8h-28q-8 0-8-8z"/><rect class="f-ink" x="143" y="95" width="34" height="8" rx="2"/>' +
+        '<g class="g-a"><circle class="f-honey" cx="112" cy="70" r="6"/><path d="M118 80q14 6 22 20m-10-3 10 3 2-10"/></g>' +
+        '<g class="g-b"><circle class="f-honey" cx="208" cy="70" r="6"/><path d="M202 80q-14 6-22 20m10-3-10 3-2-10"/></g>')
+    }
+  ];
+
+  /* A small pager. It repaints itself, so it works on a screen or in a sheet. */
+  function guide(onDone, doneLabel, onSkip) {
+    var i = 0, n = GUIDE.length, startX = null;
+    var wrap = h('div', { class: 'guide' });
+    function go(to, focusKey) {
+      if (to < 0) return;
+      if (to >= n) return onDone();
+      i = to;
+      paint();
+      var el = wrap.querySelector('[data-k="' + focusKey + '"]');
+      if (el && !el.disabled) el.focus(); else wrap.querySelector('[data-k="gnext"]').focus();
+    }
+    function paint() {
+      var step = GUIDE[i], last = i === n - 1;
+      var fig = h('div', { class: 'guide-art' });
+      fig.innerHTML = step.art;
+      fig.prepend(h('span', { class: 'guide-num', 'aria-hidden': 'true' }, i + 1));
+      wrap.replaceChildren(
+        fig,
+        h('p', { class: 'guide-text', 'aria-live': 'polite' },
+          h('span', { class: 'sr-only' }, 'Step ' + (i + 1) + ' of ' + n + '. '), step.text),
+        h('div', { class: 'guide-dots', 'aria-hidden': 'true' },
+          GUIDE.map(function (s, k) { return h('i', { class: k === i ? 'now' : null }); })),
+        h('div', { class: 'row' },
+          btn('Back', function () { go(i - 1, 'gback'); }, { k: 'gback', disabled: i === 0 }),
+          btn(last ? doneLabel : 'Next', function () { go(i + 1, 'gnext'); }, { kind: 'primary', k: 'gnext' })),
+        !last && onSkip ? h('div', { class: 'actions' }, btn('Skip', onSkip, { kind: 'small plain', k: 'gskip' })) : null,
+        last ? h('details', null, h('summary', null, 'All the rules in words'), howToContent()) : null);
+    }
+    wrap.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 50 && !(dx < 0 && i === n - 1)) go(i + (dx < 0 ? 1 : -1), 'gnext');
+    });
+    paint();
+    return wrap;
+  }
+
   function pointsContent() {
     var rows = [
       ['Light card completed', '+' + E.POINTS.light],
@@ -292,7 +404,9 @@
     return h('ul', { class: 'followups' }, FOLLOW_UPS.map(function (q) { return h('li', null, q); }));
   }
 
-  function showHowTo(facing) { openSheet({ title: 'How to play', facing: facing, content: howToContent() }); }
+  function showHowTo(facing) {
+    openSheet({ title: 'How to play', facing: facing, locked: true, content: guide(closeSheet, 'Got it', closeSheet) });
+  }
   function showPoints(facing) { openSheet({ title: 'What earns points', facing: facing, content: pointsContent() }); }
   function showCheat(facing) { openSheet({ title: 'Say this instead', facing: facing, content: cheatContent() }); }
 
@@ -800,17 +914,13 @@
   }
 
   function onboardingScreen() {
-    return soloScreen('onboarding', 'How to play', [
-      p('A check-in for two. It starts light, goes deeper in the middle and ends warm.'),
-      howToContent(),
-      p('You can open this any time from the menu.', 'quiet'),
-      h('div', { class: 'actions' }, btn('Got it', function () {
-        settings.onboarded = true;
-        saveSettings();
-        view = { name: 'home' };
-        render();
-      }, { kind: 'primary', k: 'gotit' }))
-    ]);
+    var done = function () {
+      settings.onboarded = true;
+      saveSettings();
+      view = { name: 'home' };
+      render();
+    };
+    return soloScreen('onboarding', 'How to play', [guide(done, 'Start', done)]);
   }
 
   function startGame() {

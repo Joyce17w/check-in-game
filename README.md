@@ -40,8 +40,8 @@ that device only and override `cards.json` until "Reset all piles to defaults".
 
 ## After changing any file
 
-The service worker serves the cached copy first and refreshes in the
-background, so a change shows up on the second load. If you add or rename
+Online, the app always loads the newest files; the cache is only used offline.
+If you add or rename
 files, update the list in `sw.js` and bump its `CACHE` name.
 
 ## Rule decisions the spec left open

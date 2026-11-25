@@ -1,8 +1,8 @@
-// Offline support. Everything the app needs is cached on first visit and
-// served from the cache afterwards, refreshing quietly in the background when
-// there is a connection. Only this app's own files are ever requested.
+// Offline support. Everything the app needs is cached on first visit. Online,
+// files come fresh from the server; offline, they come from the cache.
+// Only this app's own files are ever requested.
 // Bump CACHE when the list of files changes.
-const CACHE = 'check-in-v4';
+const CACHE = 'check-in-v6';
 const ASSETS = [
   './',
   'index.html',
@@ -29,21 +29,20 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Network first, so a new version shows up straight away when online.
+// The cache is the fallback that makes the app work offline.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const cached = await cache.match(req, { ignoreSearch: true });
-      const fresh = fetch(req).then((res) => {
+      try {
+        const res = await fetch(req, { cache: 'no-cache' });
         if (res.ok) cache.put(req, res.clone());
         return res;
-      });
-      if (cached) {
-        fresh.catch(() => {});
-        return cached;
+      } catch (e) {
+        return (await cache.match(req, { ignoreSearch: true })) || cache.match('index.html');
       }
-      return fresh.catch(() => cache.match('index.html'));
     })
   );
 });
